@@ -5,6 +5,7 @@
   "description": "Workout logging — logs datés depuis un template, sans écrasement",
   "type": "module",
   "scripts": {
-    "workout:new": "node scripts/workout-new.mjs"
+    "workout:new": "node scripts/workout-new.mjs",
+    "site:build": "python3 scripts/build-site.py"
   }
 }

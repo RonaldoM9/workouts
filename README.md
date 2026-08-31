@@ -31,6 +31,17 @@ npm run workout:new -- --date 2026-09-01
 
 Le script génère `logs/YYYY/MM/YYYY-MM-DD.md` depuis le template et **ne remplace jamais un fichier existant** (erreur si la séance existe déjà).
 
+## Site statique (GitHub Pages)
+
+Le site est généré depuis les logs et publié sur **https://ronaldom9.github.io/workouts/** :
+
+```bash
+npm run site:build   # régénère index.html depuis logs/ + profile.md + stats/
+git add -A && git commit -m "..." && git push   # la publication est automatique
+```
+
+Chaque séance complétée apparaît alors sur le site (avec son `Completed Workout`, sa source de vérité).
+
 ## Règles de logging
 
 - **`## Planned Workout`** = ce qui était prévu (avant la séance).
