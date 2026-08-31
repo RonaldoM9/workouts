@@ -1,0 +1,10 @@
+{
+  "name": "workouts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Workout logging — logs datés depuis un template, sans écrasement",
+  "type": "module",
+  "scripts": {
+    "workout:new": "node scripts/workout-new.mjs"
+  }
+}
