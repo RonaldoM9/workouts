@@ -132,13 +132,13 @@ def conditioning_html(c):
     ) + '</div>'
 
 def review_html(r, extra):
-    if not r and not extra.strip():
+    if not r:
         return '<p class="muted">—</p>'
-    if r:
-        return '<div class="chips">' + ''.join(
-            f'<span class="chip"><b>{esc(k)}</b> {esc(v)}</span>' for k, v in r.items()
-        ) + '</div>' + render_md(extra)
-    return render_md(extra)
+    rest = '\n'.join(l for l in extra.splitlines() if not re.match(r'^[^:]+:\s*\S', l))
+    chips = '<div class="chips">' + ''.join(
+        f'<span class="chip"><b>{esc(k)}</b> {esc(v)}</span>' for k, v in r.items()
+    ) + '</div>'
+    return chips + (render_md(rest) if rest.strip() else '')
 
 def workout_article(w):
     completed_placeholder = ('<p class="muted">Aucune série loggée — à remplir après la séance.</p>'
