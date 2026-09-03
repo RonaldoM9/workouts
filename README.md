@@ -31,16 +31,17 @@ npm run workout:new -- --date 2026-09-01
 
 Le script génère `logs/YYYY/MM/YYYY-MM-DD.md` depuis le template et **ne remplace jamais un fichier existant** (erreur si la séance existe déjà).
 
-## Site statique (GitHub Pages)
+## Site (GitHub Pages)
 
-Le site est généré depuis les logs et publié sur **https://ronaldom9.github.io/workouts/** :
+**https://ronaldom9.github.io/workouts/** — app statique qui lit les logs **en direct** depuis le repo (aucune régénération nécessaire) :
 
-```bash
-npm run site:build   # régénère index.html depuis logs/ + profile.md + stats/
-git add -A && git commit -m "..." && git push   # la publication est automatique
-```
+- **Accueil** : état du jour, stats, meilleurs lifts, semaine
+- **Séances** : détail de chaque log (Completed = source de vérité)
+- **Logger** : saisie des séries (exercice, reps, poids kg, RPE, notes) → publication directe dans le repo via l'API GitHub (token fine-grained optionnel, créé depuis le site en ~1 min ; sans token : brouillon local ou copie markdown)
+- **Progression** : graphiques charge max / 1RM estimé / volume par exercice (auto, depuis Completed uniquement)
+- **Profil / PRs / Exercices** : rendu des fichiers markdown de référence
 
-Chaque séance complétée apparaît alors sur le site (avec son `Completed Workout`, sa source de vérité).
+Les fichiers `index.html`, `styles.css`, `app.js` sont l'app ; les logs restent des fichiers markdown dans `logs/`. À chaque push sur `main`, Pages se met à jour (l'app sert les données en direct, donc rien à reconstruire après un log).
 
 ## Règles de logging
 
