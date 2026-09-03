@@ -105,14 +105,15 @@ h1.hero .grad{background:linear-gradient(92deg,#00d4aa 10%,#7cffdf 50%,#7c5cff 1
 .stat .v small{font-family:'Inter';font-size:13px;color:var(--mut);font-weight:600;letter-spacing:0}
 .stat .l{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut2);margin-top:7px}
 
-.weekbar{display:flex;gap:8px;align-items:flex-end;height:86px;padding:12px 4px 0}
-.wb{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.weekbar{display:flex;gap:8px;align-items:flex-end;height:104px;padding:12px 4px 0}
+.wb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
 .wb .bar{width:100%;max-width:34px;border-radius:8px 8px 3px 3px;min-height:6px;transition:.3s}
 .wb.on .bar{background:linear-gradient(180deg,#00d4aa,#00a884);box-shadow:0 0 14px var(--acc-glow)}
 .wb.plan .bar{background:var(--panel2);border:1px dashed var(--line2)}
-.wb.off .bar{background:#15151d}
+.wb.off .bar{background:#15151d;border:1px solid rgba(255,255,255,.03)}
 .wb .dl{font-size:10px;font-weight:700;color:var(--mut2);text-transform:uppercase;letter-spacing:.5px}
-.wb.on .dl{color:var(--acc)}
+.wb .dd{font-size:9.5px;color:var(--mut2)}
+.wb.on .dl,.wb.on .dd{color:var(--acc)}
 
 .lift-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
 .lift{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;overflow:hidden;transition:.15s}

@@ -159,19 +159,26 @@ async function refreshFiles(force = false) {
     return; // cache à jour
   }
   const files = {};
-  await Promise.all(tree.paths.map(async p => {
+  const fetches = tree.paths.map(async p => {
     try {
       const r = await fetch(RAW + p);
       if (r.ok) files[p] = await r.text();
-    } catch { /* fichier ignoré */ }
-  }));
+    } catch { /* retry ci-dessous */ }
+  });
+  await Promise.all(fetches);
+  // retry une fois les fichiers manquants
+  const missing = tree.paths.filter(p => files[p] === undefined);
+  for (const p of missing) {
+    try { const r = await fetch(RAW + p); if (r.ok) files[p] = await r.text(); } catch { /* abandon */ }
+  }
+  if (!Object.keys(files).length && tree.paths.length) throw new Error('fichiers illisibles');
   state.files = files; state.treeSha = tree.sha;
   lsSet(LS_FILES, { sha: tree.sha, files });
 }
 function buildWorkouts() {
   const out = [];
   Object.keys(state.files).filter(p => p.startsWith('logs/') && p.endsWith('.md')).forEach(p => {
-    const dm = p.match(/logs\/(\d{4})\/(\d{2})\/(\d{2}-\d{2}-\d{2})\.md/);
+    const dm = p.match(/logs\/(\d{4})\/(\d{2})\/(\d{4}-\d{2}-\d{2})\.md/);
     if (!dm) return;
     const parsed = parseWorkout(state.files[p]);
     out.push({ date: dm[3], path: p, ...parsed });
@@ -336,7 +343,7 @@ function renderHome() {
     const d = new Date(); d.setDate(d.getDate() - i);
     const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const w = byDate(ds);
-    week.push({ ds, cls: w ? (w.hasCompleted ? 'on' : 'plan') : 'off', dl: d.toLocaleDateString('fr-FR', { weekday: 'narrow' }) });
+    week.push({ ds, cls: w ? (w.hasCompleted ? 'on' : 'plan') : 'off', dl: d.toLocaleDateString('fr-FR', { weekday: 'narrow' }), dn: d.getDate() });
   }
   const liftTiles = Object.entries(lifts).sort((a, b) => b[1].kg - a[1].kg).slice(0, 6);
   const last = state.workouts.find(w => w.plannedMd.trim() || w.hasCompleted) || null;
@@ -362,7 +369,7 @@ function renderHome() {
 
   <div class="section-title">Cette semaine <span class="n">· ${week.filter(d => d.cls === 'on').length} faites</span></div>
   <div class="card"><div class="weekbar">
-    ${week.map(d => `<div class="wb ${d.cls}" title="${d.ds}"><div class="bar"></div><span class="dl">${esc(d.dl)}</span></div>`).join('')}
+    ${week.map(d => `<div class="wb ${d.cls}" title="${d.ds}"><div class="bar"></div><span class="dl">${esc(d.dl)}</span><span class="dd">${d.dn}</span></div>`).join('')}
   </div></div>
 
   <div class="section-title">Meilleurs lifts <span class="n">· auto depuis Completed</span></div>
