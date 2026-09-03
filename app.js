@@ -128,7 +128,7 @@ function parseWorkout(md) {
   String(sec['Completed Workout'] || '').split('\n').forEach(ln => {
     if (!/^\|.*\|$/.test(ln.trim())) return;
     const c = ln.trim().split('|').slice(1, -1).map(x => x.trim());
-    if (c.length < 6 || !c[0] || c[0].toLowerCase() === 'exercise') return;
+    if (c.length < 6 || !c[0] || c[0].toLowerCase() === 'exercise' || /^-+$/.test(c[0])) return;
     rows.push({ ex: c[0], set: c[1], reps: c[2], weight: c[3], rpe: c[4], notes: c[5] });
   });
   return {
